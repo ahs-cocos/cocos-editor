@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
-import {Header, List, Button} from "semantic-ui-react";
+import {Header, List, Button, Icon} from "semantic-ui-react";
 import CourseRenderer from "../component/CourseRenderer";
 
-const CourseOverview = ({courseService, cocosUser, onSelectCourse, onCreateCourse}) => {
+const CourseList = ({courseService, cocosUser, onSelectCourse, onCreateCourse}) => {
 
     const [courses, setCourses] = useState()
 
@@ -16,12 +16,11 @@ const CourseOverview = ({courseService, cocosUser, onSelectCourse, onCreateCours
 
     if (!courses) return null
 
-    console.log('COURSES', courses)
     return (
         <div className='flex-container'>
             <div style={{marginTop: '30px'}} className='content-container'>
 
-                <Button style={{alignSelf: 'flex-end'}} icon='plus' color='teal' onClick={onCreateCourse}>Create new course</Button>
+                <Button style={{alignSelf: 'flex-end'}} color='teal' onClick={onCreateCourse}><Icon name='plus'/>Create new course</Button>
 
                 <Header as='h2'>My own courses</Header>
                 <List divided relaxed>
@@ -44,15 +43,15 @@ const CourseOverview = ({courseService, cocosUser, onSelectCourse, onCreateCours
     )
 }
 
-export default  CourseOverview
+export default  CourseList
 
-CourseOverview.propTypes = {
-    courseService: PropTypes.object,
+CourseList.propTypes = {
+    courseService: PropTypes.object.isRequired,
     cocosUser: PropTypes.object,
     onSelectCourse: PropTypes.func,
     onCreateCourse: PropTypes.func
 }
 
-CourseOverview.defaultProps = {
+CourseList.defaultProps = {
 
 }
