@@ -1,19 +1,29 @@
 {
   "name": "cocos-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Dany Dhondt <dany.dhondt@arteveldehs.be>",
   "private": true,
+  "homepage": "https://ahs-prod-web-cocos.azurewebsites.net/editor/",
   "dependencies": {
+    "@ckeditor/ckeditor5-alignment": "^16.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^16.0.0",
+    "@ckeditor/ckeditor5-build-decoupled-document": "^16.0.0",
+    "@ckeditor/ckeditor5-react": "^2.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "firebase": "^7.5.2",
+    "moment": "^2.24.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0"
+    "react-scripts": "3.3.0",
+    "react-sortable-tree": "^2.7.1",
+    "react-with-firebase-auth": "^1.2.0",
+    "semantic-ui-react": "^0.88.2"
   },
   "scripts": {
     "start": "BROWSER='Safari Technology Preview' react-scripts start",
-    "build": "react-scripts --max_old_space_size=4096 build",
+    "build": "react-scripts --max_old_space_size=8192 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "patch": "yarn version --patch && genversion --semi src/version.js && node ./src/versiongenerator.js",
@@ -33,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "genversion": "^2.2.0"
   }
 }
