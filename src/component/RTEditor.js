@@ -1,7 +1,10 @@
 import React, {useRef} from 'react'
 import PropTypes from 'prop-types'
 import CKEditor from '@ckeditor/ckeditor5-react'
+
+//this is a custom build with autosave added. It is a linked package!
 import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+
 import {ApplicationPath} from "cocos-lib"
 import {Sticky} from "semantic-ui-react";
 
@@ -9,12 +12,14 @@ import {Sticky} from "semantic-ui-react";
 //azure ftp pw: AmBa32JBxufvvTnw4hLujjo9iYxdDAobmvQBlZjuaxqWoXiRD2FTkTnhLbmT
 //azure db pw: qnWZ4K5uUQmh
 
-const RTEditor = ({readOnly, onChange, data}) => {
+console.log(CKEditor)
+const RTEditor = ({readOnly, onChange, data, onAutoSave}) => {
 
     const toolbarRef = useRef(null)
 
+    //console.log('path', ApplicationPath.ck_php_connector)
     return (
-        <div style={{padding: '20px'}}>
+        <div style={{padding: '5px'}}>
 
             <Sticky offset={50}>
                 <div ref={toolbarRef}/>
@@ -27,7 +32,13 @@ const RTEditor = ({readOnly, onChange, data}) => {
                     ckfinder: {
                         // Upload the images to the server using the CKFinder QuickUpload command.
                         uploadUrl: `${ApplicationPath.ck_php_connector}?command=QuickUpload&type=Images&responseType=json`
-                    }
+                    },
+                    autosave: {
+                        waitingTime: 5000, // in ms
+                        save( editor ) {
+                            return onAutoSave( editor.getData() );
+                        }
+                    },
                 }}
                 onInit={editor => {
                     // You can store the "editor" and use when it is needed.
@@ -56,7 +67,8 @@ export default RTEditor
 RTEditor.propTypes = {
     readOnly: PropTypes.bool,
     onChange: PropTypes.func,
-    data: PropTypes.string
+    data: PropTypes.string,
+    onAutoSave: PropTypes.func
 }
 
 RTEditor.defaultProps = {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import moment from "moment";
 
@@ -6,7 +6,7 @@ const CourseInfo = ({course}) => {
 
     return (
         <div className='course-info'>
-            {`Created on ${moment(course.date_created).format('DD-MM-YYYY')} by ${course.ownerDisplayName} | Last modified on ${moment(course.date_modified).format('DD-MM-YYYY')} by ${course.lastModifiedByDisplayName}`}
+            {`Created on ${moment(course.date_created).format('MMM DD YYYY')} by ${course.ownerDisplayName} | Last modified on ${moment(course.date_modified).format('MMM DD YYYY')} at ${moment(course.date_modified).format('HH:mm')} by ${course.lastModifiedByDisplayName}`}
         </div>
     )
 }

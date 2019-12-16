@@ -1,29 +1,23 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
-import {Segment, Form, Button, Input, Message, Divider} from "semantic-ui-react";
-import {PublishingStatus} from "cocos-lib";
+import {Segment, Form, Button, Input, Label, Divider} from "semantic-ui-react";
+import {PublicationStatus, PublicationType} from "cocos-lib";
 
-const PublishingRenderer = ({sharing, emailValidationFunction, onRemovePublishing, onUpdatePublishing}) => {
+const PublicationRenderer = ({publication, onRemovePublication, onUpdatePublication, onEditPublication}) => {
 
-    const [sharer, setSharer] = useState(sharing.sharer)
-    const [emailValid, setEmailValid] = useState(false)
-    const [warning, setWarning] = useState('')
+    const [title, setTitle] = useState(publication.title)
+    const [publicationType, setPublicationType] = useState(publication.type)
     const [statusColor, setStatusColor] = useState('grey')
+    const [isDirty, setIsDirty] = useState(false)
 
-    useEffect(() => {
-        console.log('CHECKING', sharer)
-        const validobject = emailValidationFunction(sharer, sharing)
-        setWarning(validobject.message)
-        setEmailValid(validobject.valid)
-    }, [sharer, emailValidationFunction, sharing])
 
     useEffect(() => {
         let color
-        switch(sharing.status){
-            case PublishingStatus.PENDING:
+        switch(publication.status){
+            case PublicationStatus.CREATED:
                 color = 'red'
                 break
-            case PublishingStatus.SHARED:
+            case PublicationStatus.PUBLISHED:
                 color = 'green'
                 break
             default:
@@ -31,57 +25,99 @@ const PublishingRenderer = ({sharing, emailValidationFunction, onRemovePublishin
                 break
         }
         setStatusColor(color)
-    }, [sharing.status])
+    }, [publication.status])
 
     const onChange = (event, {name, value}) => {
-        if (name === 'sharer') setSharer(value)
+        setIsDirty(true)
+        if (name === 'title') setTitle(value)
+        if (name === 'type') setPublicationType(value)
+    }
+
+    const updatePublication = () => {
+        publication.title = title
+        publication.type = publicationType
+        if (publication.status === PublicationStatus.NEW) publication.status = PublicationStatus.CREATED
+        onUpdatePublication(publication)
+        setIsDirty(false)
     }
 
     return (
         <Segment color={statusColor}>
-            <div className='course-info' style={{marginBottom: '10px'}}>Publishing status: {sharing.status} | Role: {sharing.roles}</div>
-            <Form warning>
-                {sharing.status === PublishingStatus.NEW &&
+            <div className='course-info' style={{marginBottom: '10px'}}>Publication status: {publication.status}</div>
+            <Form>
                 <Form.Field>
-                    <label>Enter a valid email address of the person you want to share your course with</label>
-                    <div style={{display: 'flex'}}>
-                        <Input fluid focus placeholder='Email address...' name='sharer' onChange={onChange}/>
-                        <Button name='invite' color='teal' disabled={!emailValid} onClick={() => onUpdatePublishing('invite', sharing)}>Invite</Button>
-                    </div>
-                    {warning !== '' &&
-                    <Message warning header='Email address not accepted' content={warning}/>
+                    <label>Publication Title</label>
+                    {publication.status === PublicationStatus.NEW &&
+                    <p>Enter a descriptive title for your publication. The course title will always be shown, so you don't have to repeat that.</p>
                     }
+
+                    <div style={{display: 'flex'}}>
+                        <Input fluid focus placeholder='Publication title...' name='title' onChange={onChange} value={title}/>
+
+                    </div>
+                </Form.Field>
+
+                {publication.status !== PublicationStatus.NEW && publication.type === '' &&
+                <Form.Group inline>
+                    <label>Please choose a publication type</label>
+                    {PublicationType.TYPES.map((type, index) => {
+                        return <Form.Radio key={index}
+                                           label={type.toUpperCase()}
+                                           value={type}
+                                           name='type'
+                                           checked={type === publicationType}
+                                           onChange={onChange}
+                        />
+                    })}
+                </Form.Group>
+                }
+                {publication.status !== PublicationStatus.NEW && publication.type !== '' &&
+                <Form.Field inline>
+                    <label>Publication type:</label>
+                    <Label>{publicationType.toUpperCase()}</Label>
                 </Form.Field>
                 }
 
-                {sharing.status === PublishingStatus.PENDING &&
-                <div>
-                    <p>Waiting on confirmation from <strong>{sharing.sharer}</strong></p>
-                </div>
+                {publication.latest_version &&
+                <Form.Field>
+                    <label>Latest version</label>
+                    <p>{publication.latest_version}</p>
+                </Form.Field>
                 }
 
-                {sharing.status === PublishingStatus.SHARED &&
-                <div>
-                    <p>Your course is shared with <strong>{sharing.sharer}</strong></p>
-                </div>
+                {isDirty &&
+                <Button color='green' size='mini'
+                        disabled={title === ''}
+                        onClick={updatePublication}>Update</Button>
                 }
+
             </Form>
             <Divider/>
 
-            {sharing.status === PublishingStatus.NEW && <Button color='blue' size='mini' onClick={() => onRemovePublishing(sharing)}>Cancel</Button>}
-            {sharing.status !== PublishingStatus.NEW && <Button color='red' size='mini' onClick={() => onRemovePublishing(sharing)}>Stop sharing</Button>}
+           {/* {publication.status === PublicationStatus.NEW &&
+            <Button color='blue' size='mini'
+                    disabled={title === ''}
+                    onClick={() => onRemovePublication(publication)}>Cancel</Button>
+            }*/}
+
+            {publication.status !== PublicationStatus.NEW && publication.type !== '' &&
+            <a className='link' onClick={() => onEditPublication(publication)}>Publication details</a>
+            }
+
+
         </Segment>
     )
 }
 
-export default PublishingRenderer
+export default PublicationRenderer
 
-PublishingRenderer.propTypes = {
+PublicationRenderer.propTypes = {
     course: PropTypes.object.isRequired,
-    sharing: PropTypes.object.isRequired,
+    publication: PropTypes.object.isRequired,
     emailValidationFunction: PropTypes.func,
-    onRemovePublishing: PropTypes.func,
-    onUpdatePublishing: PropTypes.func,
+    onRemovePublication: PropTypes.func,
+    onUpdatePublication: PropTypes.func,
+    onEditPublication: PropTypes.func,
 }
 
-PublishingRenderer.defaultProps = {}
+PublicationRenderer.defaultProps = {}

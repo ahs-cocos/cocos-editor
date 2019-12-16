@@ -1,18 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import {Header, List, Button, Icon} from "semantic-ui-react";
+import {List, Button, Icon, Divider} from "semantic-ui-react";
 import CourseRenderer from "../component/CourseRenderer";
 
-const CourseList = ({courseService, cocosUser, onSelectCourse, onCreateCourse}) => {
+const CourseList = ({courses, onSelectCourse, onCreateCourse}) => {
 
-    const [courses, setCourses] = useState()
-
-    useEffect(() => {
-        if (!cocosUser) return
-        courseService.getCourses(cocosUser).then(res => {
-            setCourses(res)
-        })
-    }, [cocosUser, courseService])
 
     if (!courses) return null
 
@@ -20,9 +12,16 @@ const CourseList = ({courseService, cocosUser, onSelectCourse, onCreateCourse}) 
         <div className='flex-container'>
             <div style={{marginTop: '30px'}} className='content-container'>
 
-                <Button style={{alignSelf: 'flex-end'}} color='teal' onClick={onCreateCourse}><Icon name='plus'/>Create new course</Button>
+                <div style={{alignSelf: 'flex-end'}}><Button color='teal' onClick={onCreateCourse}><Icon name='plus'/>Create new course</Button></div>
 
-                <Header as='h2'>My own courses</Header>
+                <Divider/>
+                <div className='subheader'>Courses owned by me</div>
+
+                {courses.ownedCourses.length === 0 &&
+                <div>
+                    <p>You don't have any courses yet. Start by  <a className='link' onClick={onCreateCourse}>creating one</a></p>
+                </div>}
+
                 <List divided relaxed>
                     {courses.ownedCourses.map((course, index) => {
                         return (
@@ -30,7 +29,15 @@ const CourseList = ({courseService, cocosUser, onSelectCourse, onCreateCourse}) 
                         )
                     })}
                 </List>
-                <Header as='h2'>Shared with me</Header>
+               {/* <Header as='h2'>Shared with me</Header>*/}
+                <div className='subheader'>Courses shared with me</div>
+
+
+                {courses.sharedCourses.length === 0 &&
+                <div>
+                    <p>You don't have shared courses at this moment.</p>
+                </div>}
+
                 <List divided relaxed>
                     {courses.sharedCourses.map((course, index) => {
                         return (
@@ -46,8 +53,7 @@ const CourseList = ({courseService, cocosUser, onSelectCourse, onCreateCourse}) 
 export default  CourseList
 
 CourseList.propTypes = {
-    courseService: PropTypes.object.isRequired,
-    cocosUser: PropTypes.object,
+    courses: PropTypes.object.isRequired,
     onSelectCourse: PropTypes.func,
     onCreateCourse: PropTypes.func
 }

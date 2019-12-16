@@ -5,12 +5,16 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import {firebaseConfig} from './firebaseConfig';
 
-import {CourseService, CocosHeader, CocosUser, UserService} from 'cocos-lib'
+import {CourseService, CocosHeader, CocosUser, UserService, Course} from 'cocos-lib'
 import './App.css'
 import Homepage from "./pages/Homepage";
 import {Dropdown} from "semantic-ui-react";
 import CourseList from "./pages/CourseList";
 import CourseEditor from "./pages/CourseEditor";
+import moment from "moment";
+import _ from 'lodash'
+
+const version = require('./version')
 
 const firebaseApp = firebase.initializeApp(firebaseConfig)
 const firebaseAppAuth = firebaseApp.auth()
@@ -29,7 +33,14 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     const [currentView, setCurrentView] = useState('home')
     const [cocosUser, setCocosUser] = useState(null)
     const [selectedCourse, setSelectedCourse] = useState(null)
+    const [courses, setCourses] = useState()
 
+    useEffect(() => {
+        if (!cocosUser) return
+        courseService.getCourses(cocosUser).then(res => {
+            setCourses(res)
+        })
+    }, [cocosUser, courseService])
 
     useEffect(() => {
         if (!user) return
@@ -39,6 +50,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
         cocosUser.authSource = provider.providerId
         cocosUser.email = user.email
         cocosUser.displayName = user.displayName
+        cocosUser.photoURL = user.photoURL
 
         userService.getUser(cocosUser).then(res => {
             if (!res) throw new Error("No Cocos User! This shouldn't happen")
@@ -63,11 +75,6 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
         }
     })*/
 
-
-    /*const onRTContentChange = (data) => {
-        console.log('CHANGE', data, contentBlock)
-    }*/
-
     const onLoginClick = (method) => {
 
         switch (method) {
@@ -91,26 +98,53 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     }
 
     const onSelectCourse = (course) => {
-        console.log('SELECT COURSE', course)
         setSelectedCourse(course)
         setCurrentView('course')
     }
 
     const onCreateCourse = (course) => {
-        console.log('CREATE COURSE', course)
+        const answer = prompt('Enter a course title', 'My magnificent course')
+
+
+        if (answer && answer !== '') {
+            const newCourse = new Course()
+            newCourse.title = answer
+            newCourse.owner = cocosUser.id
+            newCourse.date_created = moment().format("YYYY-MM-DD HH:mm:ss")
+            newCourse.date_modified = moment().format("YYYY-MM-DD HH:mm:ss")
+            newCourse.last_modified_by = cocosUser.id
+            courseService.createCourse(newCourse).then(res => {
+                courses.ownedCourses = _.orderBy([...courses.ownedCourses, res], 'title')
+                setSelectedCourse(res)
+                setCurrentView('course')
+            })
+        }
     }
 
     const updateCourse = (course) => {
-        courseService.updateCourse(course).then(setSelectedCourse({...course}))
+        course.last_modified_by = cocosUser.id
+        course.date_modified = moment().format("YYYY-MM-DD HH:mm:ss")
+        courseService.updateCourse(course).then(() => setSelectedCourse({...course}))
     }
 
-    //if (!courseOutline || !contentBlock || !contentBlockData) return null
+    const deleteCourse = (course) => {
+        const answer = window.confirm("Are you absolutely sure you want to delete this course and ALL of it's content? There's no way back!")
+
+        if (answer) courseService.deleteCourse(course).then(res => {
+            console.log('COURSE DELETED!')
+            setCourses({...courses, ownedCourses: courses.ownedCourses.filter(c => c.id !== course.id)})
+            setSelectedCourse(null)
+            setCurrentView('courses')
+        })
+    }
 
     return (
         <div className="App">
             <CocosHeader onHeaderLogoClick={() => setCurrentView('home')}>
 
                 <div style={{flexGrow: 1}}></div>
+
+                <div style={{marginRight: '20px', color: '#666'}}>Version {version}</div>
 
                 {user &&
                 <div style={{display: 'flex', alignItems: 'center'}}>
@@ -131,22 +165,20 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
                 </div>
             </CocosHeader>
 
-            {/*<RTEditor onChange={onRTContentChange} data={contentBlockData}/>*/}
-
-
             {currentView === 'home' && <Homepage user={user}
                                                  onLoginClick={onLoginClick}
                                                  onGoToCourses={() => setCurrentView('courses')}/>}
 
-            {currentView === 'courses' && <CourseList courseService={courseService}
-                                                      cocosUser={cocosUser}
+            {currentView === 'courses' && <CourseList courses={courses}
                                                       onSelectCourse={onSelectCourse}
                                                       onCreateCourse={onCreateCourse}/>}
 
-            {(currentView === 'course' && selectedCourse) && <CourseEditor course={selectedCourse}
+            {(currentView === 'course' && selectedCourse) && <CourseEditor courseService={courseService}
+                                                                           course={selectedCourse}
                                                                            cocosUser={cocosUser}
                                                                            onBackToOverviewButtonClick={() => setCurrentView('courses')}
-                                                                           updateCourse={updateCourse}/>}
+                                                                           updateCourse={updateCourse}
+                                                                           deleteCourse={deleteCourse}/>}
         </div>
     );
 }

@@ -44,17 +44,22 @@ const Homepage = ({user, onLoginClick, onGoToCourses}) => {
             <Divider/>
 
             {!user &&
-            <div style={{margin: '30px'}}>
-                <Button color='google plus' onClick={() => onLoginClick('google')}>
-                    <Icon name='google' /> Sign in with Google
-                </Button>
-                <Button color='facebook' onClick={() => onLoginClick('facebook')}>
-                    <Icon name='facebook' /> Sign in with Facebook
-                </Button>
-                <Button color='linkedin' onClick={() => onLoginClick('microsoft')}>
-                    <Icon name='microsoft' /> Sign in with Microsoft
-                </Button>
-            </div>
+            <Container text textAlign='center' style={{margin: '30px'}}>
+                <div>
+                    <Button color='google plus' onClick={() => onLoginClick('google')}>
+                        <Icon name='google'/> Sign in with Google
+                    </Button>
+                    <Button color='facebook' onClick={() => onLoginClick('facebook')}>
+                        <Icon name='facebook'/> Sign in with Facebook
+                    </Button>
+                    <Button color='linkedin' onClick={() => onLoginClick('microsoft')}>
+                        <Icon name='microsoft'/> Sign in with Microsoft
+                    </Button>
+                </div>
+                <div style={{marginTop: '30px'}} className='course-info'>
+                    By signing in, we will store your name, email address and the photo associated with your login account. We will use this to enable you to share your courses with other users of this site. By no means we will use this info for any other purpose.
+                </div>
+            </Container>
             }
 
             {user &&
@@ -65,7 +70,7 @@ const Homepage = ({user, onLoginClick, onGoToCourses}) => {
     )
 }
 
-export default  Homepage
+export default Homepage
 
 Homepage.propTypes = {
     onLoginClick: PropTypes.func,
@@ -73,6 +78,4 @@ Homepage.propTypes = {
     user: PropTypes.object
 }
 
-Homepage.defaultProps = {
-
-}
+Homepage.defaultProps = {}
