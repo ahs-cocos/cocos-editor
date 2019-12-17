@@ -6,7 +6,7 @@ import 'react-sortable-tree/style.css'
 import {BrowserRouter} from 'react-router-dom'
 
 ReactDOM.render(
-    <BrowserRouter basename='/cosos/editor'>
+    <BrowserRouter basename='/cocos/editor'>
         <App />
     </BrowserRouter>
 

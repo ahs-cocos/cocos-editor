@@ -6,7 +6,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import {firebaseConfig} from './firebaseConfig';
 
-import {CourseService, CocosHeader, CocosUser, UserService, Course} from 'cocos-lib'
+import {CourseService, CocosHeader, CocosUser, UserService, Course, ApplicationPath} from 'cocos-lib'
 import './App.css'
 import Homepage from "./pages/Homepage";
 import {Dropdown} from "semantic-ui-react";
@@ -94,7 +94,8 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
         }
     }
 
-    const onSignOut = () => {
+    const onSignOut = (event) => {
+        event.stopPropagation()
         setCurrentView('home')
         signOut()
     }
@@ -143,8 +144,13 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
 
     return (
         <div className="App">
-            <NavLink to='/'>
-                <CocosHeader onHeaderLogoClick={() => setCurrentView('home')}>
+            {/*<NavLink to='/'>*/}
+                <CocosHeader onHeaderLogoClick={() => setCurrentView('home')} navLink={<NavLink to='/'/>}>
+
+                    <NavLink to='/'>
+                        <img height='30' onClick={() => setCurrentView('home')}
+                            src={ApplicationPath.assetsFolder + 'logo/logo-cocos-inv.png'} alt='cocos logo'/>
+                    </NavLink>
 
                     <div style={{flexGrow: 1}}></div>
 
@@ -168,7 +174,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
 
                     </div>
                 </CocosHeader>
-            </NavLink>
+           {/* </NavLink>*/}
 
             {currentView === 'home' && <Homepage user={user}
                                                  onLoginClick={onLoginClick}
