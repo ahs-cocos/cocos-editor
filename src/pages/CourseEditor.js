@@ -1,5 +1,6 @@
 import React, {useState, Fragment} from 'react'
 import PropTypes from 'prop-types'
+import {NavLink} from "react-router-dom";
 import {Button, Divider, Header, Icon, Menu} from "semantic-ui-react";
 import EditorOutlinePane from "../component/EditorOutlinePane";
 import CourseOverview from "../component/CourseOverview";
@@ -62,7 +63,7 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
     return (
         <Fragment>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', backgroundColor: '#bbbbbb'}}>
-                <Button size='mini' onClick={onBackToOverviewButtonClick}><Icon name='arrow left'/>Back to courses</Button>
+                <NavLink to='/courses'><Button size='mini' onClick={onBackToOverviewButtonClick}><Icon name='arrow left'/>Back to courses</Button></NavLink>
                 <Header as='h2' style={{margin: 0, color: '#333333'}}>{course.title}</Header>
                 <Button size='mini' floated='right'
                         color={currentView !== 'outlineDetail' ? 'teal' : ''} onClick={onSettingsButtonClick}>Course settings</Button>

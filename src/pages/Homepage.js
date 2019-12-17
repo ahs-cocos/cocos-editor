@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {NavLink} from 'react-router-dom'
 import {Image, Header, Container, Button, Divider, Icon} from "semantic-ui-react";
 import {ApplicationPath} from "cocos-lib";
 
@@ -64,7 +65,9 @@ const Homepage = ({user, onLoginClick, onGoToCourses}) => {
 
             {user &&
             <div style={{margin: '30px'}}>
-                <Button color='teal' onClick={onGoToCourses}>Go to your courses</Button>
+                <NavLink to='/courses'>
+                    <Button color='teal' onClick={onGoToCourses}>Go to your courses</Button>
+                </NavLink>
             </div>}
         </div>
     )

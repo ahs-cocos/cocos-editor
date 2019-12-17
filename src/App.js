@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Route, Switch, Link, withRouter, NavLink} from 'react-router-dom'
 
 import withFirebaseAuth from 'react-with-firebase-auth'
 import * as firebase from 'firebase/app';
@@ -142,45 +143,53 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
 
     return (
         <div className="App">
-            <CocosHeader onHeaderLogoClick={() => setCurrentView('home')}>
+            <NavLink to='/'>
+                <CocosHeader onHeaderLogoClick={() => setCurrentView('home')}>
 
-                <div style={{flexGrow: 1}}></div>
+                    <div style={{flexGrow: 1}}></div>
 
-                <div style={{marginRight: '20px', color: '#666'}}>Version {version}</div>
+                    <div style={{marginRight: '20px', color: '#666'}}>Version {version}</div>
 
-                {user &&
-                <div style={{display: 'flex', alignItems: 'center'}}>
-                    <img height='40px' src={user.photoURL} style={{marginRight: '20px'}} alt='User avatar'/>
-                    {/*<div>{user.displayName} - <Button size='mini' onClick={signOut}>Logout</Button></div>*/}
+                    {user &&
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        <img height='40px' src={user.photoURL} style={{marginRight: '20px'}} alt='User avatar'/>
+                        {/*<div>{user.displayName} - <Button size='mini' onClick={signOut}>Logout</Button></div>*/}
 
-                    <Dropdown text={`${user.displayName} (${user.email})`} pointing className='link item'>
-                        <Dropdown.Menu>
-                            <Dropdown.Item onClick={onSignOut}>Sign out</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                        <Dropdown text={`${user.displayName} (${user.email})`} pointing className='link item'>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={onSignOut}>Sign out</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
 
 
-                </div>
-                }
-                <div>
+                    </div>
+                    }
+                    <div>
 
-                </div>
-            </CocosHeader>
+                    </div>
+                </CocosHeader>
+            </NavLink>
 
             {currentView === 'home' && <Homepage user={user}
                                                  onLoginClick={onLoginClick}
                                                  onGoToCourses={() => setCurrentView('courses')}/>}
 
-            {currentView === 'courses' && <CourseList courses={courses}
-                                                      onSelectCourse={onSelectCourse}
-                                                      onCreateCourse={onCreateCourse}/>}
+            {currentView === 'courses' &&
+            <Route path='/courses'>
+                <CourseList courses={courses}
+                            onSelectCourse={onSelectCourse}
+                            onCreateCourse={onCreateCourse}/>
+            </Route>
+            }
 
-            {(currentView === 'course' && selectedCourse) && <CourseEditor courseService={courseService}
-                                                                           course={selectedCourse}
-                                                                           cocosUser={cocosUser}
-                                                                           onBackToOverviewButtonClick={() => setCurrentView('courses')}
-                                                                           updateCourse={updateCourse}
-                                                                           deleteCourse={deleteCourse}/>}
+            {(currentView === 'course' && selectedCourse) && <Route path={`/course/${selectedCourse.uuid}`}>
+                <CourseEditor courseService={courseService}
+                              course={selectedCourse}
+                              cocosUser={cocosUser}
+                              onBackToOverviewButtonClick={() => setCurrentView('courses')}
+                              updateCourse={updateCourse}
+                              deleteCourse={deleteCourse}/>
+            </Route>}
         </div>
     );
 }

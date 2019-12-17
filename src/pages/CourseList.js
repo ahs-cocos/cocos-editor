@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {NavLink} from 'react-router-dom'
 import {List, Button, Icon, Divider} from "semantic-ui-react";
 import CourseRenderer from "../component/CourseRenderer";
 
@@ -19,17 +20,19 @@ const CourseList = ({courses, onSelectCourse, onCreateCourse}) => {
 
                 {courses.ownedCourses.length === 0 &&
                 <div>
-                    <p>You don't have any courses yet. Start by  <a className='link' href='# ' onClick={onCreateCourse}>creating one</a></p>
+                    <p>You don't have any courses yet. Start by <a className='link' href='# ' onClick={onCreateCourse}>creating one</a></p>
                 </div>}
 
                 <List divided relaxed>
                     {courses.ownedCourses.map((course, index) => {
                         return (
-                            <CourseRenderer key={index} course={course} onSelect={onSelectCourse}/>
+                            <NavLink to={`course/${course.uuid}`}>
+                                <CourseRenderer key={index} course={course} onSelect={onSelectCourse}/>
+                            </NavLink>
                         )
                     })}
                 </List>
-               {/* <Header as='h2'>Shared with me</Header>*/}
+                {/* <Header as='h2'>Shared with me</Header>*/}
                 <div className='subheader'>Courses shared with me</div>
 
 
@@ -41,7 +44,9 @@ const CourseList = ({courses, onSelectCourse, onCreateCourse}) => {
                 <List divided relaxed>
                     {courses.sharedCourses.map((course, index) => {
                         return (
-                            <CourseRenderer key={index} course={course} onSelect={onSelectCourse}/>
+                            <NavLink to={`course/${course.uuid}`}>
+                                <CourseRenderer key={index} course={course} onSelect={onSelectCourse}/>
+                            </NavLink>
                         )
                     })}
                 </List>
@@ -50,7 +55,7 @@ const CourseList = ({courses, onSelectCourse, onCreateCourse}) => {
     )
 }
 
-export default  CourseList
+export default CourseList
 
 CourseList.propTypes = {
     courses: PropTypes.object.isRequired,
@@ -58,6 +63,4 @@ CourseList.propTypes = {
     onCreateCourse: PropTypes.func
 }
 
-CourseList.defaultProps = {
-
-}
+CourseList.defaultProps = {}

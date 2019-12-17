@@ -65,6 +65,7 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
                                       onClick={(role) => onContentBlockMenuClick(role, contentBlock)}/>
                 <ContentBlockMenuItem name='trash alternate outline' role='delete'
                                       onClick={(role) => onContentBlockMenuClick(role, contentBlock)}/>
+                <ContentBlockMenuItem type='string' name={`Id: ${contentBlock.id} - Outline: ${contentBlock.outline}`} role='info' enabled={false}/>
             </ContentBlockMenu>
 
             <Segment attached style={{padding: 0}}>
@@ -74,8 +75,6 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
 
                     {contentBlock.type === ContentBlockType.RICH_TEXT &&
                     <div>
-                        <p>id {contentBlock.id}</p>
-                        <p>outline {contentBlock.outline}</p>
                         <RTEditor onChange={onRTContentChange} data={contentBlockData} onAutoSave={onRTContentAutoSave}/>
                     </div>}
                 </div>
@@ -101,7 +100,7 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
             <ContentBlockMenu>
                 <ContentBlockMenuItem type='string' name='Insert new content block below' role='insertBelow'
                                       onClick={(role) => onContentBlockMenuClick(role, contentBlock)}/>
-                {isDirty && <ContentBlockMenuItem enabled={isDirty} color='green' name='save' role='save'
+                {isDirty && <ContentBlockMenuItem style={{opacity: 1}} enabled={isDirty} color='green' name='save' role='save'
                                       onClick={onSaveButtonClick}/>}
                 <div className='visible' ref={feedbackRef} style={{paddingLeft: '10px', color: '#666666'}}>{feedbackMessage}</div>
             </ContentBlockMenu>
