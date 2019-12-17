@@ -135,6 +135,7 @@ const OutlineItemDetail = ({courseService, course, cocosUser, updateCourse, node
             {contentBlocks.map((contentBlock, index) => {
                 const isFirst = index === 0
                 const isLast = index === contentBlocks.length - 1
+                console.log('FIRST', isFirst, isLast)
                 return (<ContentBlockComp key={index} animate={contentBlock.animate}
                                           courseService={courseService}
                                           course={course} updateCourse={updateCourse}

@@ -1,6 +1,6 @@
 import React, {useState, Fragment} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Divider, Header, Icon, Menu, Segment} from "semantic-ui-react";
+import {Button, Divider, Header, Icon, Menu} from "semantic-ui-react";
 import EditorOutlinePane from "../component/EditorOutlinePane";
 import CourseOverview from "../component/CourseOverview";
 import OutlineItemDetail from "../component/OutlineItemDetail";
@@ -45,6 +45,7 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
     }
 
     const publicationClassFunction = (rowInfo) => {
+
         if (!selectedPublication || currentView !== 'publication'){
             setSelectedPublication(null)
             rowInfo.node.classes = ''
@@ -118,7 +119,8 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
 
                     {(currentView === 'outlineDetail' && selectedNode) &&
                     <OutlineItemDetail courseService={courseService}
-                                       course={course} updateCourse={updateCourse}
+                                       course={course}
+                                       updateCourse={updateCourse}
                                        cocosUser={cocosUser}
                                        node={selectedNode}/>
                     }

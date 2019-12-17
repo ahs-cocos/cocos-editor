@@ -12,8 +12,7 @@ import {Sticky} from "semantic-ui-react";
 //azure ftp pw: AmBa32JBxufvvTnw4hLujjo9iYxdDAobmvQBlZjuaxqWoXiRD2FTkTnhLbmT
 //azure db pw: qnWZ4K5uUQmh
 
-console.log(CKEditor)
-const RTEditor = ({readOnly, onChange, data, onAutoSave}) => {
+const RTEditor = ({readOnly, onChange, onBlur, data, onAutoSave}) => {
 
     const toolbarRef = useRef(null)
 
@@ -52,7 +51,7 @@ const RTEditor = ({readOnly, onChange, data, onAutoSave}) => {
                     onChange && onChange(editor.getData())
                 }}
                 onBlur={(event, editor) => {
-                    console.log('Blur.', editor);
+                    onBlur && onBlur(editor.getData())
                 }}
                 onFocus={(event, editor) => {
                     console.log('Focus.', editor);
@@ -67,6 +66,7 @@ export default RTEditor
 RTEditor.propTypes = {
     readOnly: PropTypes.bool,
     onChange: PropTypes.func,
+    onBlur: PropTypes.func,
     data: PropTypes.string,
     onAutoSave: PropTypes.func
 }

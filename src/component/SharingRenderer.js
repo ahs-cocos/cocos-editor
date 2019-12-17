@@ -11,7 +11,6 @@ const SharingRenderer = ({sharing, emailValidationFunction, onRemoveSharing, onU
     const [statusColor, setStatusColor] = useState('grey')
 
     useEffect(() => {
-        console.log('CHECKING', sharer)
         const validobject = emailValidationFunction(sharer, sharing)
         setWarning(validobject.message)
         setEmailValid(validobject.valid)

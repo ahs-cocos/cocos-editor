@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Divider, Label, Header} from "semantic-ui-react";
+import {Button, Divider, Label} from "semantic-ui-react";
 import VersionRenderer from "./VersionRenderer";
 import uuidv4 from 'uuid/v4'
 import {PublicationVersion} from "cocos-lib";
@@ -13,23 +13,27 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
     const [previousVersions, setPreviousVersions] = useState([])
     const [previousVersionsVisible, setPreviousVersionsVisible] = useState(false)
 
-    const [versions, setVersions] = useState()
+    const [versions, setVersions] = useState([])
 
     useEffect(() => {
-        if (!versions) {
+        if (!versions || versions.length === 0) {
             courseService.getPublicationVersions(publication).then(res => {
                 createVersionLists(res)
             })
         }
-    }, [])
+    }, [courseService, publication, versions])
 
     const createVersionLists = (baseVersions) => {
+
+        console.log('BV', baseVersions)
         const allVersions = _.orderBy(baseVersions, ['version'], ['desc'])
 
         const lVersionId = allVersions.reduce((acc, version) => {
             if (version.version > acc) return version
             return acc
         }, 0)
+
+        if (allVersions.length === 0) return
         const lVersion = allVersions.reduce((acc, version) => {
             if (version.version === lVersionId) return version
             return acc
@@ -89,39 +93,39 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
 
             <p>When the publication is ready, a 'version' of your course is created automatically. Each version will have a unique id which you'll need to configure each implementation of the CoCos
                 viewer.</p>
-            <p>Once the publication version is generated, you can't modify it anymore, but don't worry, you can make as much versions as you like.</p>
+            <p>Once the publication version is generated, you can't modify it anymore, but don't worry, you can make as many versions as you like.</p>
             <p>You can delete a publication version. Be aware thought that any implementation of this version of your course will no longer work so thread carefully.</p>
-            <p>Don't publish a version if your couse isn't in a usable state yet.</p>
+            <p>Tip: don't publish a version if your course isn't in a usable state yet.</p>
 
 
             <Divider/>
 
             <div style={{marginBottom: '10px'}}>
                 {(!versions || versions.length === 0) &&
-                <p>There are no version yet. Click 'Publish' to add one</p>
+                <p>There are no version yet.</p>
                 }
 
                 {versions &&
                 <Fragment>
 
-                    <p>Latest Version</p>
-                    {latestVersion && <VersionRenderer version={latestVersion}/>}
+
+                    {latestVersion && <Fragment><p>Latest Version</p><VersionRenderer version={latestVersion} courseService={courseService}/></Fragment>}
 
                     {previousVersions && previousVersions.length > 0 && !previousVersionsVisible &&
-                    <a className='link' onClick={() => setPreviousVersionsVisible(true)}>Show {previousVersions.length} previous versions</a>
+                    <a className='link' href='# ' onClick={() => setPreviousVersionsVisible(true)}>Show {previousVersions.length} previous versions</a>
                     }
 
                     {previousVersions && previousVersions.length > 0 && previousVersionsVisible &&
                     <Fragment>
                         <p>Previous versions</p>
                         {previousVersions.map((version, index) => {
-                            return <VersionRenderer key={index} version={version} deleteable onDelete={deleteVersion}/>
+                            return <VersionRenderer key={index} version={version} deleteable onDelete={deleteVersion} courseService={courseService}/>
                         })}
                     </Fragment>
                     }
 
                     {previousVersions && previousVersions.length > 0 && previousVersionsVisible &&
-                    <a className='link' onClick={() => setPreviousVersionsVisible(false)}>Hide previous versions</a>
+                    <a className='link' href='# ' onClick={() => setPreviousVersionsVisible(false)}>Hide previous versions</a>
                     }
 
                 </Fragment>}

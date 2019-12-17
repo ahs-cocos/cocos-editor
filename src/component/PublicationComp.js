@@ -1,9 +1,6 @@
-import React, {Fragment, useState, useEffect} from 'react'
+import React, {Fragment, useState} from 'react'
 import PropTypes from 'prop-types'
 
-import {Button, Divider} from "semantic-ui-react";
-import {Publication, PublicationType, PublicationStatus} from "cocos-lib";
-import PublicationRenderer from "./PublicationRenderer";
 import PublicationList from "./PublicationList";
 import PublicationDetail from "./PublicationDetail";
 

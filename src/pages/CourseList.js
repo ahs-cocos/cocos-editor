@@ -19,7 +19,7 @@ const CourseList = ({courses, onSelectCourse, onCreateCourse}) => {
 
                 {courses.ownedCourses.length === 0 &&
                 <div>
-                    <p>You don't have any courses yet. Start by  <a className='link' onClick={onCreateCourse}>creating one</a></p>
+                    <p>You don't have any courses yet. Start by  <a className='link' href='# ' onClick={onCreateCourse}>creating one</a></p>
                 </div>}
 
                 <List divided relaxed>

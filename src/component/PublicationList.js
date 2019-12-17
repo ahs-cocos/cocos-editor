@@ -1,8 +1,8 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import PublicationRenderer from "./PublicationRenderer";
 import {Button, Divider} from "semantic-ui-react";
-import {Publication, PublicationStatus, PublicationType, CourseUtil} from "cocos-lib";
+import {Publication, PublicationStatus, CourseUtil} from "cocos-lib";
 
 const PublicationList = ({course, cocosUser, courseService, onEditPublication}) => {
 

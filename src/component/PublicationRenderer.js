@@ -101,7 +101,7 @@ const PublicationRenderer = ({publication, onRemovePublication, onUpdatePublicat
             }*/}
 
             {publication.status !== PublicationStatus.NEW && publication.type !== '' &&
-            <a className='link' onClick={() => onEditPublication(publication)}>Publication details</a>
+            <a className='link' href='# ' onClick={() => onEditPublication(publication)}>Publication details</a>
             }
 
 

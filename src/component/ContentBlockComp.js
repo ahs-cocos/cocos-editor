@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import PropTypes from 'prop-types'
-import {Header, Segment, Divider, Button} from "semantic-ui-react";
+import {Header, Segment, Divider, Button, Icon} from "semantic-ui-react";
 import ContentBlockMenu from "./ContentBlockMenu";
 import ContentBlockMenuItem from "./ContentBlockMenuItem";
 import {ContentBlockType} from "cocos-lib";
@@ -10,6 +10,8 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
 
     const [contentBlockData, setContentBlockData] = useState("<p>Start making your course!</p>")
     const [feedbackMessage, setFeedbackMessage] = useState('')
+    const [isDirty, setIsDirty] = useState(false)
+    const [modifiedData, setModifiedData] = useState()
 
     const feedbackRef = useRef()
 
@@ -17,15 +19,28 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
         courseService.getContentBlockData(contentBlock).then(res => {
             console.log('SETTING DATA', res, contentBlock.id)
             setContentBlockData(res)
+            setIsDirty(false)
         })
     }, [contentBlock, courseService])
 
 
     const onRTContentChange = (data) => {
-        //console.log('CHANGE', data, contentBlock)
+        setIsDirty(true)
+        setModifiedData(data)
     }
 
-    const onRTContentSave = (data) => {
+    const onSaveButtonClick = () => {
+        console.log('SAVING', modifiedData)
+        setIsDirty(false)
+        courseService.saveContentBlockData(contentBlock, modifiedData).then(res =>{
+            setIsDirty(false)
+            setFeedbackMessage('Saved')
+            setTimeout(() => feedbackRef.current && feedbackRef.current.classList.add("hidden"), 300)
+        })
+    }
+
+    const onRTContentAutoSave = (data) => {
+        return
         console.log('SAVING', data, feedbackRef)
         if (feedbackRef.current){
             feedbackRef.current.classList.remove("hidden");
@@ -34,7 +49,7 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
         }
         courseService.saveContentBlockData(contentBlock, data).then(res =>{
             setFeedbackMessage('Saved')
-            setTimeout(() => feedbackRef.current && feedbackRef.current.classList.add("hidden"), 5000)
+            setTimeout(() => feedbackRef.current && feedbackRef.current.classList.add("hidden"), 300)
         })
     }
 
@@ -50,7 +65,6 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
                                       onClick={(role) => onContentBlockMenuClick(role, contentBlock)}/>
                 <ContentBlockMenuItem name='trash alternate outline' role='delete'
                                       onClick={(role) => onContentBlockMenuClick(role, contentBlock)}/>
-                <div className='visible' ref={feedbackRef} style={{paddingLeft: '10px', color: '#666666'}}>{feedbackMessage}</div>
             </ContentBlockMenu>
 
             <Segment attached style={{padding: 0}}>
@@ -60,7 +74,9 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
 
                     {contentBlock.type === ContentBlockType.RICH_TEXT &&
                     <div>
-                        <RTEditor onChange={onRTContentChange} data={contentBlockData} onAutoSave={onRTContentSave}/>
+                        <p>id {contentBlock.id}</p>
+                        <p>outline {contentBlock.outline}</p>
+                        <RTEditor onChange={onRTContentChange} data={contentBlockData} onAutoSave={onRTContentAutoSave}/>
                     </div>}
                 </div>
                 }
@@ -85,6 +101,9 @@ const ContentBlockComp = ({contentBlock, courseService, onContentBlockMenuClick,
             <ContentBlockMenu>
                 <ContentBlockMenuItem type='string' name='Insert new content block below' role='insertBelow'
                                       onClick={(role) => onContentBlockMenuClick(role, contentBlock)}/>
+                {isDirty && <ContentBlockMenuItem enabled={isDirty} color='green' name='save' role='save'
+                                      onClick={onSaveButtonClick}/>}
+                <div className='visible' ref={feedbackRef} style={{paddingLeft: '10px', color: '#666666'}}>{feedbackMessage}</div>
             </ContentBlockMenu>
 
             <Divider/>

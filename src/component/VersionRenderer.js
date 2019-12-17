@@ -1,33 +1,67 @@
-import React, {useState, Fragment} from 'react'
+import React, {Fragment, useState} from 'react'
 import PropTypes from 'prop-types'
-import {Segment, Header} from "semantic-ui-react";
+import {Segment, Header, Modal, Button, Icon} from "semantic-ui-react";
 import moment from "moment";
 
-const VersionRenderer = ({version, deleteable, onDelete}) => {
+const Parser = require('html-react-parser')
+
+const VersionRenderer = ({version, deleteable, onDelete, courseService}) => {
+
+    const [modalOpen, setModalOpen] = useState(false)
+    const [previewData, setPreviewData] = useState('<p>No preview data</p>')
 
     const previewPublication = () => {
+//test only
+        courseService.getPreviewData(version).then(res => {
+            console.log('PUBLISH RES', res)
+            setPreviewData(res)
+            setModalOpen(true)
+        })
 
     }
 
     return (
-        <Segment>
-            <Header as='h3'>Version {version.version} - Published on {moment(version.date).format('MMM DD YYYY')} by {version.published_by}</Header>
-            <p>Unique id: {version.uuid}</p>
-            <div>
-                <a className='link' onClick={previewPublication}>Preview this version</a>
+        <Fragment>
+            <Segment>
+                <Header as='h3'>Version {version.version} - Published on {moment(version.date).format('MMM DD YYYY')} by {version.published_by}</Header>
+                <p>Unique id: {version.uuid}</p>
+                <div>
+                    <a className='link' href='# ' onClick={previewPublication}>Preview this version</a>
 
-                {deleteable && <Fragment>
-                    &nbsp;| <a className='link-delete' onClick={() => onDelete(version)}>Delete this version</a>
-                </Fragment>}
-            </div>
+                    {deleteable && <Fragment>
+                        &nbsp;| <a className='link-delete' href='# ' onClick={() => onDelete(version)}>Delete this version</a>
+                    </Fragment>}
+                </div>
 
-        </Segment>
+            </Segment>
+
+            <Modal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                basic
+                dimmer='inverted'
+                size='small'
+                centered={false}
+            >
+                <Header icon='browser' content='Version preview'/>
+                <Modal.Content>
+                    {Parser(previewData)}
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color='green' onClick={() => setModalOpen(false)}>
+                        <Icon name='checkmark'/> Close
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+
+        </Fragment>
     )
 }
 
-export default  VersionRenderer
+export default VersionRenderer
 
 VersionRenderer.propTypes = {
+    courseService: PropTypes.object.isRequired,
     version: PropTypes.object.isRequired,
     deleteable: PropTypes.bool,
     onDelete: PropTypes.func

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
-import {Header, Icon, Divider, Button, Segment} from "semantic-ui-react";
+import {Header, Divider} from "semantic-ui-react";
 import {CourseOutline} from 'cocos-lib'
 
 const EditorOutlinePane = ({
