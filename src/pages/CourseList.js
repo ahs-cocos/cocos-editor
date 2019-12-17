@@ -13,7 +13,7 @@ const CourseList = ({courses, onSelectCourse, onCreateCourse}) => {
         <div className='flex-container'>
             <div style={{marginTop: '30px'}} className='content-container'>
 
-                <div style={{alignSelf: 'flex-end'}}><Button color='teal' onClick={onCreateCourse}><Icon name='plus'/>Create new course</Button></div>
+                <div style={{alignSelf: 'flex-end'}}><NavLink to='/courses'><Button color='teal' onClick={onCreateCourse}><Icon name='plus'/>Create new course</Button></NavLink></div>
 
                 <Divider/>
                 <div className='subheader'>Courses owned by me</div>

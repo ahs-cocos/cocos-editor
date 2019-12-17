@@ -1,5 +1,6 @@
 import React, {Fragment, useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
+import {NavLink} from "react-router-dom";
 import {Form, Button, Icon, Divider} from "semantic-ui-react";
 import {MultiSelect} from "cocos-lib";
 
@@ -80,7 +81,7 @@ const CourseOverview = ({course, cocosUser, updateCourse, deleteCourse}) => {
             <Fragment>
                 <div className='subheader'>Danger zone</div>
                 <p><Icon name='warning'/>Warning: deleting a course is irreversible. You'll get a second warnning.</p>
-                <Button color='red' onClick={() => deleteCourse(course)}>Delete course</Button>
+                <NavLink to='/courses'><Button color='red' onClick={() => deleteCourse(course)}>Delete course</Button></NavLink>
             </Fragment>
             }
         </Fragment>

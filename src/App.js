@@ -118,9 +118,10 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
             newCourse.date_modified = moment().format("YYYY-MM-DD HH:mm:ss")
             newCourse.last_modified_by = cocosUser.id
             courseService.createCourse(newCourse).then(res => {
-                courses.ownedCourses = _.orderBy([...courses.ownedCourses, res], 'title')
-                setSelectedCourse(res)
-                setCurrentView('course')
+                //courses.ownedCourses = _.orderBy([...courses.ownedCourses, res], 'title')
+                //setSelectedCourse(res)
+                setCourses({ownedCourses: _.orderBy([...courses.ownedCourses, res], 'title'), sharedCourses: [...courses.sharedCourses]})
+                setCurrentView('courses')
             })
         }
     }
@@ -188,7 +189,8 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
             </Route>
             }
 
-            {(currentView === 'course' && selectedCourse) && <Route path={`/course/${selectedCourse.uuid}`}>
+            {(currentView === 'course' && selectedCourse) &&
+            <Route path={`/course/${selectedCourse.uuid}`}>
                 <CourseEditor courseService={courseService}
                               course={selectedCourse}
                               cocosUser={cocosUser}
@@ -196,6 +198,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
                               updateCourse={updateCourse}
                               deleteCourse={deleteCourse}/>
             </Route>}
+
         </div>
     );
 }
