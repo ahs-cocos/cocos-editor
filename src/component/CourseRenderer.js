@@ -9,6 +9,7 @@ const CourseRenderer = ({course, onSelect}) => {
         <Segment style={{cursor: 'pointer'}} onClick={() => onSelect(course)}>
             <Header as='h3' color='blue'>{course.title}</Header>
             <CourseInfo course={course}/>
+            <div className='course-info'>Unique course id: {course.uuid}</div>
             <Divider/>
             <p>{course.description}</p>
         </Segment>

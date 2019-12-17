@@ -13,6 +13,7 @@ import CourseList from "./pages/CourseList";
 import CourseEditor from "./pages/CourseEditor";
 import moment from "moment";
 import _ from 'lodash'
+import uuidv4 from 'uuid/v4'
 
 const version = require('./version')
 
@@ -108,6 +109,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
 
         if (answer && answer !== '') {
             const newCourse = new Course()
+            newCourse.uuid = uuidv4()
             newCourse.title = answer
             newCourse.owner = cocosUser.id
             newCourse.date_created = moment().format("YYYY-MM-DD HH:mm:ss")
