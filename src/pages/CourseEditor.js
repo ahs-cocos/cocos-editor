@@ -62,7 +62,7 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
 
     return (
         <Fragment>
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', backgroundColor: '#bbbbbb'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', backgroundColor: '#bbbbbb', paddingRight: '50px'}}>
                 <NavLink to='/courses'><Button size='mini' onClick={onBackToOverviewButtonClick}><Icon name='arrow left'/>Back to courses</Button></NavLink>
                 <Header as='h2' style={{margin: 0, color: '#333333'}}>{course.title}</Header>
                 <Button size='mini' floated='right'
@@ -87,6 +87,11 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
                             onClick={() => setCurrentView('overview')}
                         />
                         <Menu.Item
+                            name='cover'
+                            active={currentView === 'cover'}
+                            onClick={() => setCurrentView('cover')}
+                        />
+                        <Menu.Item
                             name='sharing'
                             active={currentView === 'sharing'}
                             onClick={() => setCurrentView('sharing')}
@@ -102,9 +107,15 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
                     {currentView === 'overview' &&
                     <CourseOverview course={course} cocosUser={cocosUser} updateCourse={updateCourse} deleteCourse={deleteCourse}/>
                     }
+
+                    {currentView === 'cover' &&
+                    <div>Coming soon</div>
+                    }
+
                     {currentView === 'sharing' &&
                     <CourseSharingComp course={course} cocosUser={cocosUser} updateCourse={updateCourse} courseService={courseService}/>
                     }
+
                     {currentView === 'publication' &&
                     <PublicationComp course={course} cocosUser={cocosUser}
                                      updateCourse={updateCourse}

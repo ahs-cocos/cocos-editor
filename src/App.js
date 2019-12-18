@@ -47,14 +47,16 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     useEffect(() => {
         if (!user) return
 
+        console.log('FIREBASE USER', user)
         const provider = user.providerData[0]
         const cocosUser = new CocosUser()
         cocosUser.authSource = provider.providerId
         cocosUser.email = user.email
         cocosUser.displayName = user.displayName
-        cocosUser.photoURL = user.photoURL
+        cocosUser.photoURL = user.photoURL ? user.photoURL : ''
 
         userService.getUser(cocosUser).then(res => {
+            console.log('CU CREATED', res)
             if (!res) throw new Error("No Cocos User! This shouldn't happen")
             setCocosUser(res)
         })
