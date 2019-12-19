@@ -2,6 +2,7 @@ import React, {Fragment, useState} from 'react'
 import PropTypes from 'prop-types'
 import {Segment, Header, Modal, Button, Icon} from "semantic-ui-react";
 import moment from "moment";
+import {ApplicationPath} from "cocos-lib";
 
 const Parser = require('html-react-parser')
 
@@ -12,11 +13,15 @@ const VersionRenderer = ({version, deleteable, onDelete, courseService}) => {
 
     const previewPublication = () => {
 //test only
-        courseService.getPreviewData(version).then(res => {
+
+
+            window.open(`${ApplicationPath.serverRoot}/viewer/previewVersion.php?uuid=${version.uuid}`,'_blank');
+
+       /* courseService.getPreviewData(version).then(res => {
             console.log('PUBLISH RES', res)
             setPreviewData(res)
             setModalOpen(true)
-        })
+        })*/
 
     }
 

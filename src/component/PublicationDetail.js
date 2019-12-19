@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {Button, Divider, Label} from "semantic-ui-react";
 import VersionRenderer from "./VersionRenderer";
 import uuidv4 from 'uuid/v4'
-import {PublicationVersion} from "cocos-lib";
+import {PublicationVersion, PublicationStatus} from "cocos-lib";
 import moment from "moment";
 import _ from 'lodash'
 
@@ -49,6 +49,7 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
         const answer = window.confirm('Did you check that you have selected the correct outline items?')
 
         if (answer) {
+
             const version = new PublicationVersion()
             version.uuid = uuidv4()
             version.date = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -61,6 +62,7 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
 
             courseService.createPublicationVersion(version).then(res => {
                 publication.latest_version = 'Version ' + res.version + ' - ' + moment(res.data).format('MMM DD YYYY')
+                publication.status = PublicationStatus.PUBLISHED
                 courseService.updatePublication(publication) //silent
 
                 createVersionLists([...versions, res])
@@ -135,7 +137,7 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
 
             <Divider/>
 
-            <Button color='green' onClick={onEditEnd}>Save and exit</Button>
+            {/*<Button color='green' onClick={onEditEnd}>Save and exit</Button>*/}
         </div>
     )
 }

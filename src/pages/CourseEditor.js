@@ -33,6 +33,8 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
 
             setPublicationIds(newIds)
             selectedPublication.outline_ids = newIds.join(',')
+            //immediate save --silent
+            courseService.updatePublication(selectedPublication)
         } else {
             setCurrentView('outlineDetail')
             if (node) setSelectedNode(node)
@@ -66,7 +68,7 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
                 <NavLink to='/courses'><Button size='mini' onClick={onBackToOverviewButtonClick}><Icon name='arrow left'/>Back to courses</Button></NavLink>
                 <Header as='h2' style={{margin: 0, color: '#333333'}}>{course.title}</Header>
                 <Button size='mini' floated='right'
-                        color={currentView !== 'outlineDetail' ? 'teal' : ''} onClick={onSettingsButtonClick}>Course settings</Button>
+                        color={currentView !== 'outlineDetail' ? 'teal' : 'grey'} onClick={onSettingsButtonClick}>Course settings</Button>
             </div>
 
             <div className='flex-container'>

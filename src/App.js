@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Route, Switch, Link, withRouter, NavLink} from 'react-router-dom'
+import {Route, NavLink} from 'react-router-dom'
 
 import withFirebaseAuth from 'react-with-firebase-auth'
 import * as firebase from 'firebase/app';
@@ -26,6 +26,20 @@ const providers = {
     microsoftProvider: new firebase.auth.OAuthProvider('microsoft.com')
 }
 
+firebase.auth().getRedirectResult()
+    .then(function(result) {
+        console.log('REDIRECT RES', result)
+        // User is signed in.
+        // IdP data available in result.additionalUserInfo.profile.
+        // OAuth access token can also be retrieved:
+        // result.credential.accessToken
+        // OAuth ID token can also be retrieved:
+        // result.credential.idToken
+    })
+    .catch(function(error) {
+        // Handle error.
+    });
+
 function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
 
     //const [contentBlock, setContentBlock] = useState()
@@ -36,6 +50,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     const [cocosUser, setCocosUser] = useState(null)
     const [selectedCourse, setSelectedCourse] = useState(null)
     const [courses, setCourses] = useState()
+    const [loginState, setLoginState] = useState('loggedOut')
 
     useEffect(() => {
         if (!cocosUser) return
@@ -47,7 +62,6 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     useEffect(() => {
         if (!user) return
 
-        console.log('FIREBASE USER', user)
         const provider = user.providerData[0]
         const cocosUser = new CocosUser()
         cocosUser.authSource = provider.providerId
@@ -56,9 +70,9 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
         cocosUser.photoURL = user.photoURL ? user.photoURL : ''
 
         userService.getUser(cocosUser).then(res => {
-            console.log('CU CREATED', res)
             if (!res) throw new Error("No Cocos User! This shouldn't happen")
             setCocosUser(res)
+            setLoginState('loggedIn')
         })
     }, [user, userService])
 
@@ -81,15 +95,18 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
 
     const onLoginClick = (method) => {
 
+        setLoginState('loggingIn')
+
+
         switch (method) {
             case 'google':
-                signInWithGoogle()
+                firebase.auth().signInWithPopup(providers.googleProvider)
                 break
             case 'microsoft':
-                firebase.auth().signInWithRedirect(providers.microsoftProvider)
+                firebase.auth().signInWithPopup(providers.microsoftProvider)
                 break
             case 'facebook':
-                signInWithFacebook()
+                firebase.auth().signInWithPopup(providers.facebookProvider)
                 break
             default:
                 break
@@ -99,6 +116,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     const onSignOut = (event) => {
         event.stopPropagation()
         setCurrentView('home')
+        setLoginState('loggedOut')
         signOut()
     }
 
@@ -110,6 +128,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     const onCreateCourse = (course) => {
         const answer = prompt('Enter a course title', 'My magnificent course')
 
+        console.log('CREATE COURSE', cocosUser)
 
         if (answer && answer !== '') {
             const newCourse = new Course()
@@ -161,8 +180,8 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
 
                     {user &&
                     <div style={{display: 'flex', alignItems: 'center'}}>
-                        <img height='40px' src={user.photoURL} style={{marginRight: '20px'}} alt='User avatar'/>
-                        {/*<div>{user.displayName} - <Button size='mini' onClick={signOut}>Logout</Button></div>*/}
+                        {user.photoURL && user.photoURL !== '' &&
+                        <img height='40px' src={user.photoURL} style={{marginRight: '20px'}} alt='User avatar'/>}
 
                         <Dropdown text={`${user.displayName} (${user.email})`} pointing className='link item'>
                             <Dropdown.Menu>
@@ -179,7 +198,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
                 </CocosHeader>
            {/* </NavLink>*/}
 
-            {currentView === 'home' && <Homepage user={user}
+            {currentView === 'home' && <Homepage loginState={loginState}
                                                  onLoginClick={onLoginClick}
                                                  onGoToCourses={() => setCurrentView('courses')}/>}
 

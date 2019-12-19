@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {Icon, Popup} from "semantic-ui-react";
 
-const ContentBlockMenuItem = ({type, name, role, tooltip, enabled, onClick, color}) => {
+const ContentBlockMenuItem = ({type, name, role, tooltip, enabled, important, inverted, onClick, color}) => {
 
     return (
-        <div className={enabled ? 'content-block-menu-item': 'content-block-menu-item-disabled'} onClick={() => (enabled && onClick) && onClick(role)}>
+        <div className={enabled ? important ? 'content-block-menu-item content-block-menu-item-important' : 'content-block-menu-item' : 'content-block-menu-item-disabled'} onClick={() => (enabled && onClick) && onClick(role)}>
 
             {type === 'icon' &&
             <Popup disabled={tooltip === ''}
-                   mouseEnterDelay={500} content={tooltip} trigger={<div><Icon style={{margin: 0}} color={color} name={name}/></div>} />
+                   mouseEnterDelay={500} content={tooltip} trigger={<div><Icon style={{margin: 0}} inverted={inverted} color={color} name={name}/></div>} />
             }
 
 
@@ -27,6 +27,8 @@ ContentBlockMenuItem.propTypes = {
     role: PropTypes.string.isRequired,
     tooltip: PropTypes.string,
     enabled: PropTypes.bool.isRequired,
+    important: PropTypes.bool,
+    inverted: PropTypes.bool,
     onClick: PropTypes.func
 }
 
@@ -34,5 +36,7 @@ ContentBlockMenuItem.defaultProps = {
     type: 'icon',
     tooltip: '',
     color: 'grey',
-    enabled: true
+    enabled: true,
+    important: false,
+    inverted: false
 }

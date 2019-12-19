@@ -16,13 +16,13 @@ const PublicationComp = ({course, cocosUser, courseService, onSelectPublication}
         onSelectPublication && onSelectPublication(publication)
     }
 
-    const onEditEnd = () => {
+    /*const onEditEnd = () => {
         courseService.updatePublication(selectedPublication).then(res => {
             setSelectedPublication(null)
             onSelectPublication && onSelectPublication(null)
             setView('list')
         })
-    }
+    }*/
 
     return (
 
@@ -31,7 +31,7 @@ const PublicationComp = ({course, cocosUser, courseService, onSelectPublication}
             {view === 'list' && <PublicationList courseService={courseService} course={course} onEditPublication={onEditPublication}/>}
 
             {view === 'detail' && selectedPublication &&
-            <PublicationDetail courseService={courseService} course={course} cocosUser={cocosUser} publication={selectedPublication} onEditEnd={onEditEnd}/>
+            <PublicationDetail courseService={courseService} course={course} cocosUser={cocosUser} publication={selectedPublication}/>
             }
         </Fragment>
     )

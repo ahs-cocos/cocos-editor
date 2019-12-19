@@ -26,8 +26,8 @@ const CourseList = ({courses, onSelectCourse, onCreateCourse}) => {
                 <List divided relaxed>
                     {courses.ownedCourses.map((course, index) => {
                         return (
-                            <NavLink to={`course/${course.uuid}`}>
-                                <CourseRenderer key={index} course={course} onSelect={onSelectCourse}/>
+                            <NavLink key={index} to={`course/${course.uuid}`}>
+                                <CourseRenderer course={course} onSelect={onSelectCourse}/>
                             </NavLink>
                         )
                     })}
@@ -44,8 +44,8 @@ const CourseList = ({courses, onSelectCourse, onCreateCourse}) => {
                 <List divided relaxed>
                     {courses.sharedCourses.map((course, index) => {
                         return (
-                            <NavLink to={`course/${course.uuid}`}>
-                                <CourseRenderer key={index} course={course} onSelect={onSelectCourse}/>
+                            <NavLink key={index} to={`course/${course.uuid}`}>
+                                <CourseRenderer course={course} onSelect={onSelectCourse}/>
                             </NavLink>
                         )
                     })}

@@ -4,7 +4,7 @@ import {NavLink} from 'react-router-dom'
 import {Image, Header, Container, Button, Divider, Icon} from "semantic-ui-react";
 import {ApplicationPath} from "cocos-lib";
 
-const Homepage = ({user, onLoginClick, onGoToCourses}) => {
+const Homepage = ({loginState, onLoginClick, onGoToCourses}) => {
 
     return (
         <div className='homepage-container'>
@@ -44,7 +44,12 @@ const Homepage = ({user, onLoginClick, onGoToCourses}) => {
 
             <Divider/>
 
-            {!user &&
+            {(loginState === 'loggingIn' || loginState === 'idle') &&
+            <div>Logging in...</div>
+            }
+
+
+            {loginState === 'loggedOut' &&
             <Container text textAlign='center' style={{margin: '30px'}}>
                 <div>
                     <Button color='google plus' onClick={() => onLoginClick('google')}>
@@ -63,7 +68,7 @@ const Homepage = ({user, onLoginClick, onGoToCourses}) => {
             </Container>
             }
 
-            {user &&
+            {loginState === 'loggedIn' &&
             <div style={{margin: '30px'}}>
                 <NavLink to='/courses'>
                     <Button color='teal' onClick={onGoToCourses}>Go to your courses</Button>
@@ -76,9 +81,9 @@ const Homepage = ({user, onLoginClick, onGoToCourses}) => {
 export default Homepage
 
 Homepage.propTypes = {
+    loginState: PropTypes.string,
     onLoginClick: PropTypes.func,
-    onGoToCourses: PropTypes.func,
-    user: PropTypes.object
+    onGoToCourses: PropTypes.func
 }
 
 Homepage.defaultProps = {}

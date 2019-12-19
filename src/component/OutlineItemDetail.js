@@ -26,7 +26,6 @@ const OutlineItemDetail = ({courseService, course, cocosUser, updateCourse, node
         if (selectedContentBlock) selectedContentBlock.animate = false
 
         const cbIndex = contentBlocks.indexOf(contentBlock)
-        console.log('CLICK', role, contentBlock, cbIndex)
 
         let previousBlock, nextBlock, newSort, newContentBlock = new ContentBlock()
 
@@ -105,9 +104,10 @@ const OutlineItemDetail = ({courseService, course, cocosUser, updateCourse, node
     const onContentBlockTypeChange = (contentBlock, type) => {
 
         contentBlock.type = type
-        courseService.updateContentBlock(contentBlock)
-        updateCourse(course)
-        setContentBlocks(_.orderBy(contentBlocks.map(cb => {return {...cb}}), 'sort'))
+        courseService.updateContentBlock(contentBlock).then(res => {
+            updateCourse(course)
+            setContentBlocks(_.orderBy(contentBlocks.map(cb => {return {...cb}}), 'sort'))
+        })
     }
 
     const createContentBlock = () => {
@@ -121,7 +121,7 @@ const OutlineItemDetail = ({courseService, course, cocosUser, updateCourse, node
         newContentBlock.course = course.id
 
         courseService.createContentBlock(newContentBlock).then(res => {
-            res.animate = true
+            //res.animate = true
             setContentBlocks(_.orderBy([...contentBlocks, res], 'sort'))
         })
         updateCourse(course)
@@ -135,7 +135,6 @@ const OutlineItemDetail = ({courseService, course, cocosUser, updateCourse, node
             {contentBlocks.map((contentBlock, index) => {
                 const isFirst = index === 0
                 const isLast = index === contentBlocks.length - 1
-                console.log('FIRST', isFirst, isLast)
                 return (<ContentBlockComp key={index} animate={contentBlock.animate}
                                           courseService={courseService}
                                           course={course} updateCourse={updateCourse}

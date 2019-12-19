@@ -16,7 +16,6 @@ const RTEditor = ({readOnly, onChange, onBlur, data, onAutoSave}) => {
 
     const toolbarRef = useRef(null)
 
-    //console.log('path', ApplicationPath.ck_php_connector)
     return (
         <div style={{padding: '5px'}}>
 
