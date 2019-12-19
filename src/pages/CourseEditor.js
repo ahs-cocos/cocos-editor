@@ -1,19 +1,28 @@
-import React, {useState, Fragment} from 'react'
+import React, {useState, useEffect, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {NavLink} from "react-router-dom";
 import {Button, Divider, Header, Icon, Menu} from "semantic-ui-react";
+
 import EditorOutlinePane from "../component/EditorOutlinePane";
 import CourseOverview from "../component/CourseOverview";
 import OutlineItemDetail from "../component/OutlineItemDetail";
 import CourseSharingComp from "../component/CourseSharingComp";
 import PublicationComp from "../component/PublicationComp";
+import CommentComp from "../component/comment/CommentComp";
 
-const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCourse, courseService, deleteCourse}) => {
+const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCourse, courseService, deleteCourse, commentService}) => {
 
     const [currentView, setCurrentView] = useState('overview')
     const [selectedNode, setSelectedNode] = useState()
     const [selectedPublication, setSelectedPublication] = useState()
     const [publicationIds, setPublicationIds] = useState([])
+    const [comments, setComments] = useState()
+
+    useEffect(() => {
+        commentService.getComments(course).then(res => {
+            setComments(res)
+        })
+    }, [course, commentService])
 
     const onNodeSelect = (node) => {
         if (!node) {
@@ -22,10 +31,10 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
             return
         }
 
-        if (selectedPublication){
+        if (selectedPublication) {
             console.log('TOGGLING', node)
             let newIds
-            if (publicationIds.indexOf(node.id) > -1){
+            if (publicationIds.indexOf(node.id) > -1) {
                 newIds = publicationIds.filter(id => id !== node.id)
             } else {
                 newIds = [...publicationIds, node.id]
@@ -49,7 +58,7 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
 
     const publicationClassFunction = (rowInfo) => {
 
-        if (!selectedPublication || currentView !== 'publication'){
+        if (!selectedPublication || currentView !== 'publication') {
             setSelectedPublication(null)
             rowInfo.node.classes = ''
             return
@@ -60,6 +69,24 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
 
     const onSettingsButtonClick = (event, {active}) => {
         active ? onNodeSelect() : setCurrentView('overview')
+    }
+
+    const createComment = (comment) => {
+
+        commentService.createComment(comment).then(res => {
+            setComments([...comments, res])
+        })
+    }
+
+    const deleteComment = (comment) => {
+
+        const answer = window.confirm('Are you sure you want to delete this comment?')
+
+        if (answer) {
+            commentService.deleteComment(comment).then(res => {
+                setComments(comments.filter(c => c.id !== comment.id))
+            })
+        }
     }
 
     return (
@@ -141,9 +168,15 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
                 </div>
 
                 <div className='editor-right-column'>
-                    <Header>Annotations</Header>
-
+                    <Header>Comments</Header>
                     <Divider style={{marginTop: 0}}/>
+                    <CommentComp comments={comments}
+                                 outline={selectedNode}
+                                 course={course}
+                                 commentService={commentService}
+                                 cocosUser={cocosUser}
+                                 createComment={createComment}
+                                 deleteComment={deleteComment}/>
                 </div>
             </div>
         </Fragment>
@@ -154,6 +187,7 @@ export default CourseEditor
 
 CourseEditor.propTypes = {
     courseService: PropTypes.object.isRequired,
+    commentService: PropTypes.object.isRequired,
     course: PropTypes.object.isRequired,
     cocosUser: PropTypes.object.isRequired,
     onBackToOverviewButtonClick: PropTypes.func,

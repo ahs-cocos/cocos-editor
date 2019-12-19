@@ -6,7 +6,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import {firebaseConfig} from './firebaseConfig';
 
-import {CourseService, CocosHeader, CocosUser, UserService, Course, ApplicationPath} from 'cocos-lib'
+import {CourseService, CocosHeader, CocosUser, UserService, Course, ApplicationPath, CommentService} from 'cocos-lib'
 import './App.css'
 import Homepage from "./pages/Homepage";
 import {Dropdown} from "semantic-ui-react";
@@ -28,7 +28,7 @@ const providers = {
 
 firebase.auth().getRedirectResult()
     .then(function(result) {
-        console.log('REDIRECT RES', result)
+        //console.log('REDIRECT RES', result)
         // User is signed in.
         // IdP data available in result.additionalUserInfo.profile.
         // OAuth access token can also be retrieved:
@@ -46,6 +46,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     //const [contentBlockData, setContentBlockData] = useState()
     const [courseService] = useState(new CourseService())
     const [userService] = useState(new UserService())
+    const [commentService] = useState(new CommentService())
     const [currentView, setCurrentView] = useState('home')
     const [cocosUser, setCocosUser] = useState(null)
     const [selectedCourse, setSelectedCourse] = useState(null)
@@ -213,6 +214,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
             {(currentView === 'course' && selectedCourse) &&
             <Route path={`/course/${selectedCourse.uuid}`}>
                 <CourseEditor courseService={courseService}
+                              commentService={commentService}
                               course={selectedCourse}
                               cocosUser={cocosUser}
                               onBackToOverviewButtonClick={() => setCurrentView('courses')}

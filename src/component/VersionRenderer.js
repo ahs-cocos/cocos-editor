@@ -9,7 +9,7 @@ const Parser = require('html-react-parser')
 const VersionRenderer = ({version, deleteable, onDelete, courseService}) => {
 
     const [modalOpen, setModalOpen] = useState(false)
-    const [previewData, setPreviewData] = useState('<p>No preview data</p>')
+    const [previewData] = useState('<p>No preview data</p>')
 
     const previewPublication = () => {
 //test only
