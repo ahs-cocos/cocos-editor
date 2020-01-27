@@ -13,33 +13,12 @@ const Homepage = ({loginState, onLoginClick, onGoToCourses}) => {
             <Header style={{margin: '40px'}} size='huge'>Welcome to the CoCos online course editor</Header>
             <Container text>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-                    ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et
-                    magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
-                    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
-                    quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-                    arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.
-                    Nullam dictum felis eu pede link mollis pretium. Integer tincidunt. Cras
-                    dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.
-                    Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
-                    Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus
-                    viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-                    Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
+                    Co-creation has become a hot topic in higher education, especially because of its potential to solve a number of challenges in the current higher education setting. In a society characterised by globalisation, digitalisation, and constant change, educational institutions – higher education institutions (HEI) as well as adult education institutions – must think beyond today and provide students with the skills to shape tomorrow’s society. 21st century skills such as digital literacy, sustainability, entrepreneurship, global citizenship and research must be achieved by introducing New Generation curriculum design and – importantly – the self-directed curriculum.
                 </p>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-                    ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et
-                    magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
-                    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
-                    quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-                    arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.
-                    Nullam dictum felis eu pede link mollis pretium. Integer tincidunt. Cras
-                    dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.
-                    Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
-                    Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus
-                    viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-                    Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
+                    These are catalysts for a more student-centered learning approach, smarter use of ICT, and tighter links between educational institutions and employers as well as social enterprises. It therefore comes as no surprise that co-creation of course content by a broad range of stakeholders has gained much attention. The main objective of the COCOS project is therefore to apply the mindset, methods and tools gleaned for open source development to the co-creation of course content.
                 </p>
+                <p>Login via one of the options below and start co-creating.</p>
             </Container>
 
             <Divider/>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {Feed, Form, Button} from "semantic-ui-react";
 import moment from 'moment'
 import {Comment, CommentContext} from 'cocos-lib'
+import CommentFeedRenderer from "./CommentFeedRenderer";
 
 const CommentComp = ({comments, course, cocosUser, outline, createComment, deleteComment}) => {
 
@@ -44,24 +45,7 @@ const CommentComp = ({comments, course, cocosUser, outline, createComment, delet
         <div>
             <Feed>
                 {filteredComments.map((comment, index) => {
-                    return <Feed.Event key={index}>
-                        <Feed.Label image={comment.author_photo_url}/>
-                        <Feed.Content>
-                            <Feed.Summary>
-                                <a href='# '>{comment.author_display_name}</a>
-                                <Feed.Date>{moment(comment.date).format('MMM, DD YYYY HH:mm')}</Feed.Date>
-                            </Feed.Summary>
-                            <Feed.Extra text>
-                                {comment.comment}
-                            </Feed.Extra>
-                            <Feed.Meta>
-                                {comment.author === cocosUser.id && <a href='# ' onClick={() => deleteComment(comment)}>Delete comment</a>}
-                                {/*<Feed.Like>
-                                    <Icon name='like' />5 Likes
-                                </Feed.Like>*/}
-                            </Feed.Meta>
-                        </Feed.Content>
-                    </Feed.Event>
+                    return <CommentFeedRenderer key={index} comment={comment} cocosUser={cocosUser} onDeleteComment={deleteComment}/>
                 })}
 
             </Feed>
