@@ -1,15 +1,18 @@
 import React, {Fragment, useState} from 'react'
 import PropTypes from 'prop-types'
-import {Segment, Header, Modal, Button, Icon} from "semantic-ui-react";
+import {Segment, Header, Modal, Button, Icon, Label} from "semantic-ui-react";
 import moment from "moment";
 import {ApplicationPath} from "cocos-lib";
 
 const Parser = require('html-react-parser')
+const {CopyToClipboard} = require('react-copy-to-clipboard')
 
 const VersionRenderer = ({version, deleteable, onDelete, courseService}) => {
 
     const [modalOpen, setModalOpen] = useState(false)
     const [previewData] = useState('<p>No preview data</p>')
+    const [uuidCopied, setUuidCopied] = useState(false)
+
 
     const previewPublication = () => {
 //test only
@@ -29,8 +32,19 @@ const VersionRenderer = ({version, deleteable, onDelete, courseService}) => {
         <Fragment>
             <Segment>
                 <Header as='h3'>Version {version.version} - Published on {moment(version.date).format('MMM DD YYYY')} by {version.published_by}</Header>
-                <p>Unique id: {version.uuid}</p>
-                <div>
+                <div><span style={{marginRight: '10px'}}>Unique id:</span>
+                    <Label>{version.uuid}
+                        <CopyToClipboard text={version.uuid}
+                                         onCopy={() => setUuidCopied(true)}>
+                            <Button circular style={{width: '24px', height: '24px', padding: 0, marginLeft: '20px'}}
+                                    color={uuidCopied ? 'green' : 'grey'} icon={uuidCopied ? 'check' : 'clipboard'}/>
+
+                        </CopyToClipboard>
+                </Label>
+
+                </div>
+
+                <div style={{marginTop: '10px'}}>
                     <a className='link' href='# ' onClick={previewPublication}>Preview this version</a>
 
                     {deleteable && <Fragment>

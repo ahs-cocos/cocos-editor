@@ -1,8 +1,10 @@
 import React, {Fragment, useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {NavLink} from "react-router-dom";
-import {Form, Button, Icon, Divider} from "semantic-ui-react";
+import {Form, Button, Icon, Divider, Segment, Label} from "semantic-ui-react";
 import {MultiSelect} from "cocos-lib";
+
+const {CopyToClipboard} = require('react-copy-to-clipboard')
 
 const CourseOverview = ({course, cocosUser, updateCourse, deleteCourse}) => {
 
@@ -10,6 +12,7 @@ const CourseOverview = ({course, cocosUser, updateCourse, deleteCourse}) => {
     const [courseTitle, setCourseTitle] = useState(course.title)
     const [courseDescription, setCourseDescription] = useState(course.description)
     const [isDirty, setIsDirty] = useState(false)
+    const [uuidCopied, setUuidCopied] = useState(false)
 
     useEffect(() => {
         setCourseTags(course.tags || '')
@@ -70,6 +73,22 @@ const CourseOverview = ({course, cocosUser, updateCourse, deleteCourse}) => {
                     <label>Tags</label>
                     <MultiSelect delimiterSeparatedDataString={courseTags} onChange={onChangeTags}/>
                 </Form.Field>
+
+                <Form.Field>
+                    <label>Course unique id</label>
+                    <Segment>
+                        <Label>{course.uuid}
+                            <CopyToClipboard text={course.uuid}
+                                             onCopy={() => setUuidCopied(true)}>
+                                <Button circular style={{width: '24px', height: '24px', padding: 0, marginLeft: '20px'}}
+                                        color={uuidCopied ? 'green' : 'grey'} icon={uuidCopied ? 'check' : 'clipboard'}/>
+
+                            </CopyToClipboard>
+                        </Label>
+
+                    </Segment>
+                </Form.Field>
+
 
                 {isDirty && <div><Divider/><Button type='submit' color='teal' onClick={update}>Update</Button></div>}
             </Form>
