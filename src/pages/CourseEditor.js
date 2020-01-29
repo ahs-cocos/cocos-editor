@@ -8,7 +8,7 @@ import CourseOverview from "../component/CourseOverview";
 import OutlineItemDetail from "../component/OutlineItemDetail";
 import CourseSharingComp from "../component/CourseSharingComp";
 import PublicationComp from "../component/PublicationComp";
-import CommentComp from "../component/comment/CommentComp";
+import {CommentComp, CommentContext} from "cocos-lib";
 
 const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCourse, courseService, deleteCourse, commentService}) => {
 
@@ -72,8 +72,8 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
     }
 
     const createComment = (comment) => {
-
         commentService.createComment(comment).then(res => {
+            console.log('COMMENT', res)
             setComments([...comments, res])
         })
     }
@@ -173,6 +173,7 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
                     <CommentComp comments={comments}
                                  outline={selectedNode}
                                  course={course}
+                                 context={CommentContext.EDITOR}
                                  commentService={commentService}
                                  cocosUser={cocosUser}
                                  createComment={createComment}
