@@ -1,6 +1,6 @@
 {
   "name": "cocos-editor",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "author": "Dany Dhondt <dany.dhondt@arteveldehs.be>",
   "private": true,
   "homepage": "https://www.arteveldehogeschool.be/cocos/editor/",
@@ -20,6 +20,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "react": "^16.12.0",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.12.0",
     "react-html-email": "^3.0.0",
     "react-router-dom": "^5.1.2",
