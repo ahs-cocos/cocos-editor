@@ -10,6 +10,8 @@ import CourseSharingComp from "../component/CourseSharingComp";
 import PublicationComp from "../component/PublicationComp";
 import {CommentComp, CommentContext} from "cocos-lib";
 
+const COMMENT_TIMER_TIMEOUT = 3000
+
 const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCourse, courseService, deleteCourse, commentService}) => {
 
     const [currentView, setCurrentView] = useState('overview')
@@ -18,11 +20,24 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
     const [publicationIds, setPublicationIds] = useState([])
     const [comments, setComments] = useState()
 
+
+    useEffect(() => {
+        const id = setInterval(updateComments, COMMENT_TIMER_TIMEOUT)
+
+        return () => clearInterval(id)
+    }, [])
+
     useEffect(() => {
         commentService.getComments(course).then(res => {
             setComments(res)
         })
     }, [course, commentService])
+
+    const updateComments = () => {
+        commentService.getComments(course).then(res => {
+            if (res) setComments(res)
+        })
+    }
 
     const onNodeSelect = (node) => {
         if (!node) {

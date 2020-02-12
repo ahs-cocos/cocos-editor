@@ -53,6 +53,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
     const [courses, setCourses] = useState()
     const [loginState, setLoginState] = useState('loggedOut')
 
+
     useEffect(() => {
         if (!cocosUser) return
         courseService.getCourses(cocosUser).then(res => {
@@ -164,6 +165,7 @@ function App({user, signOut, signInWithGoogle, signInWithFacebook}) {
             setCurrentView('courses')
         })
     }
+
 
     return (
         <div className="App">
