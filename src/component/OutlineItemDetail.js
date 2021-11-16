@@ -5,6 +5,7 @@ import ContentBlockComp from "./ContentBlockComp";
 import {ContentBlock} from 'cocos-lib'
 import moment from "moment";
 import _ from 'lodash'
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const OutlineItemDetail = ({courseService, course, cocosUser, updateCourse, node}) => {
 
@@ -131,6 +132,7 @@ const OutlineItemDetail = ({courseService, course, cocosUser, updateCourse, node
 
     return (
         <div style={{height: '100%'}}>
+            <ComponentIdentifier displayName='OutlineItemDetail'/>
 
             {contentBlocks.map((contentBlock, index) => {
                 const isFirst = index === 0

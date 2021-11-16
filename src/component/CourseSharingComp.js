@@ -6,6 +6,7 @@ import {Button, Divider} from "semantic-ui-react";
 import {CourseSharing, SharingStatus, SharingRoles} from "cocos-lib";
 import SharingRenderer from "./SharingRenderer";
 import * as EmailValidator from 'email-validator';
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 //import { Email, Item, Span, A, renderEmail, Box, Image } from 'react-html-email'
 //const Parser = require('html-react-parser')
@@ -44,7 +45,7 @@ const CourseSharingComp = ({course, cocosUser, updateCourse, courseService}) => 
         })
     }, [course, courseService])
 
-    
+
     const addSharing = () => {
         const sharing = new CourseSharing()
         sharing.course = course.id
@@ -101,10 +102,11 @@ const CourseSharingComp = ({course, cocosUser, updateCourse, courseService}) => 
     }
 
     if (!courseSharing) return null
-    
+
     return (
 
         <Fragment>
+            <ComponentIdentifier displayName='CourseSharingComp'/>
 
             {/*<div className='subheader'>Course sharing</div>*/}
             <div style={{marginTop: '30px'}}>
@@ -126,7 +128,7 @@ const CourseSharingComp = ({course, cocosUser, updateCourse, courseService}) => 
                 })
 
                 }
-                
+
                 <Divider/>
 
                 <Button color='green' onClick={addSharing}>Add sharing</Button>

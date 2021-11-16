@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {Header, Divider} from "semantic-ui-react";
 import {CourseOutline} from 'cocos-lib'
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const EditorOutlinePane = ({
                                course,
@@ -37,12 +38,13 @@ const EditorOutlinePane = ({
 
     return (
         <div className='editor-left-column'>
+            <ComponentIdentifier displayName='EditorOutlinePane'/>
 
             {/*<div className='subheader'>Course outline</div>*/}
             <Header>Course outline</Header>
 
             <Divider style={{marginTop: 0}}/>
-            
+
             <CourseOutline courseOutline={courseOutline}
                            editable={editable}
                            onTreeUpdate={onTreeUpdate}

@@ -1,8 +1,12 @@
-import React, {Fragment, useState, useEffect} from 'react'
+import React, {Fragment, useState, useEffect, useContext} from 'react'
 import PropTypes from 'prop-types'
 import {NavLink} from "react-router-dom";
 import {Form, Button, Icon, Divider, Segment, Label} from "semantic-ui-react";
+import {TrefwoordenViewer} from '@ahsmediatheek/med-component-trefwoorden'
+import ServiceContext from '../context/ServiceContext'
+
 import {MultiSelect} from "cocos-lib";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const {CopyToClipboard} = require('react-copy-to-clipboard')
 
@@ -13,6 +17,8 @@ const CourseOverview = ({course, cocosUser, updateCourse, deleteCourse}) => {
     const [courseDescription, setCourseDescription] = useState(course.description)
     const [isDirty, setIsDirty] = useState(false)
     const [uuidCopied, setUuidCopied] = useState(false)
+
+    const serviceContext = useContext(ServiceContext)
 
     useEffect(() => {
         setCourseTags(course.tags || '')
@@ -49,6 +55,7 @@ const CourseOverview = ({course, cocosUser, updateCourse, deleteCourse}) => {
 
         <Fragment>
 
+            <ComponentIdentifier displayName='CourseOverview'/>
 
            {/* <div className='subheader'>Course overview</div>*/}
             <Form>
@@ -69,9 +76,17 @@ const CourseOverview = ({course, cocosUser, updateCourse, deleteCourse}) => {
                                onChange={onChange}
                                placeholder='Enter course description'/>
 
-                <Form.Field>
+               {/* <Form.Field>
                     <label>Tags</label>
                     <MultiSelect delimiterSeparatedDataString={courseTags} onChange={onChangeTags}/>
+                </Form.Field>*/}
+
+                <Form.Field>
+                    <TrefwoordenViewer consumerKey={serviceContext.COCOS_EDITOR_TREFWOORDEN_CONSUMER_KEY}
+                                       allowCandidates={true}
+                                       onChangeTrefwoorden={onChangeTags}
+                                       trefwoordenString={courseTags}
+                                       locale='en'/>
                 </Form.Field>
 
                 <Form.Field>

@@ -7,6 +7,7 @@ import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
 
 import {ApplicationPath} from "cocos-lib"
 import {Sticky} from "semantic-ui-react";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 //https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/frameworks/react.html
 //azure ftp pw: AmBa32JBxufvvTnw4hLujjo9iYxdDAobmvQBlZjuaxqWoXiRD2FTkTnhLbmT
@@ -18,6 +19,7 @@ const RTEditor = ({readOnly, onChange, onBlur, data, onAutoSave}) => {
 
     return (
         <div style={{padding: '5px'}}>
+            <ComponentIdentifier displayName='RTEditor'/>
 
             <Sticky offset={50}>
                 <div ref={toolbarRef}/>
@@ -56,6 +58,7 @@ const RTEditor = ({readOnly, onChange, onBlur, data, onAutoSave}) => {
                     console.log('Focus.', editor);
                 }}
             />
+
         </div>
     )
 }

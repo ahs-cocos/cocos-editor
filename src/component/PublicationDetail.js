@@ -1,17 +1,19 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Divider, Label} from "semantic-ui-react";
+import {Button, Divider, Label, Form, Header} from "semantic-ui-react";
 import VersionRenderer from "./VersionRenderer";
 import uuidv4 from 'uuid/v4'
 import {PublicationVersion, PublicationStatus} from "cocos-lib";
 import moment from "moment";
 import _ from 'lodash'
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const PublicationDetail = ({publication, courseService, course, onEditEnd, cocosUser}) => {
 
     const [latestVersion, setLatestVersion] = useState()
     const [previousVersions, setPreviousVersions] = useState([])
     const [previousVersionsVisible, setPreviousVersionsVisible] = useState(false)
+    const [settings, setSettings] = useState()
 
     const [versions, setVersions] = useState([])
 
@@ -23,9 +25,26 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
         }
     }, [courseService, publication, versions])
 
+    useEffect(() => {
+        if (!publication) return
+        if (!publication.settings){
+            const settings = {showCourseOutline: true, showCourseAuthors: true, showCourseComments: true}
+            setSettings(settings)
+            courseService.updatePublication(publication)
+        } else {
+            setSettings(JSON.parse(publication.settings))
+        }
+    }, [publication])
+
+    const onSettingsChange = (event, {name, checked}) => {
+        const newSettings = {...settings, [name]: checked}
+        setSettings(newSettings)
+        publication.settings = JSON.stringify(newSettings)
+        courseService.updatePublication(publication)
+    }
+
     const createVersionLists = (baseVersions) => {
 
-        console.log('BV', baseVersions)
         const allVersions = _.orderBy(baseVersions, ['version'], ['desc'])
 
         const lVersionId = allVersions.reduce((acc, version) => {
@@ -54,6 +73,7 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
             version.uuid = uuidv4()
             version.date = moment().format('YYYY-MM-DD HH:mm:ss')
             version.publication = publication.id
+            version.renderAuthors = settings.showCourseAuthors
             version.version = versions.reduce((acc, version) => {
                 if (version.version > acc) return version.version
                 return acc
@@ -85,6 +105,8 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
 
     return (
         <div>
+            <ComponentIdentifier displayName='PublicationDetail'/>
+
             <div className='subheader'>{publication.title}</div>
 
             <p>Publication of your course involves two steps:</p>
@@ -102,6 +124,18 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
 
             <Divider/>
 
+            <Form>
+
+                <Header>Settings</Header>
+
+                <Form.Checkbox label='Show course outline' name='showCourseOutline' checked={settings && settings.showCourseOutline} onChange={onSettingsChange}/>
+                <Form.Checkbox label='Show course authors' name='showCourseAuthors' checked={settings && settings.showCourseAuthors} onChange={onSettingsChange}/>
+                <Form.Checkbox label='Show course comments' name='showCourseComments' checked={settings && settings.showCourseComments} onChange={onSettingsChange}/>
+
+            </Form>
+
+            <Divider/>
+
             <div style={{marginBottom: '10px'}}>
                 {(!versions || versions.length === 0) &&
                 <p>There are no version yet.</p>
@@ -111,7 +145,7 @@ const PublicationDetail = ({publication, courseService, course, onEditEnd, cocos
                 <Fragment>
 
 
-                    {latestVersion && <Fragment><p>Latest Version</p><VersionRenderer version={latestVersion} courseService={courseService}/></Fragment>}
+                    {latestVersion && <Fragment><strong>Latest Version</strong><VersionRenderer version={latestVersion} courseService={courseService}/></Fragment>}
 
                     {previousVersions && previousVersions.length > 0 && !previousVersionsVisible &&
                     <a className='link' href='# ' onClick={() => setPreviousVersionsVisible(true)}>Show {previousVersions.length} previous versions</a>

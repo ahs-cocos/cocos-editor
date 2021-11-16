@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import PublicationList from "./PublicationList";
 import PublicationDetail from "./PublicationDetail";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const PublicationComp = ({course, cocosUser, courseService, onSelectPublication}) => {
 
@@ -27,6 +28,7 @@ const PublicationComp = ({course, cocosUser, courseService, onSelectPublication}
     return (
 
         <Fragment>
+            <ComponentIdentifier displayName='PublicationComp'/>
 
             {view === 'list' && <PublicationList courseService={courseService} course={course} onEditPublication={onEditPublication}/>}
 

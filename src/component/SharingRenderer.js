@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {Segment, Form, Button, Input, Message, Divider} from "semantic-ui-react";
 import {SharingStatus} from "cocos-lib";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const SharingRenderer = ({sharing, emailValidationFunction, onRemoveSharing, onUpdateSharing}) => {
 
@@ -38,6 +39,8 @@ const SharingRenderer = ({sharing, emailValidationFunction, onRemoveSharing, onU
 
     return (
         <Segment color={statusColor}>
+            <ComponentIdentifier displayName='SharingRenderer'/>
+
             <div className='course-info' style={{marginBottom: '10px'}}>Sharing status: {sharing.status} | Role: {sharing.roles}</div>
             <Form warning>
                 {sharing.status === SharingStatus.NEW &&

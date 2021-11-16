@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {Segment, Header, Modal, Button, Icon, Label} from "semantic-ui-react";
 import moment from "moment";
 import {ApplicationPath} from "cocos-lib";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const Parser = require('html-react-parser')
 const {CopyToClipboard} = require('react-copy-to-clipboard')
@@ -30,6 +31,8 @@ const VersionRenderer = ({version, deleteable, onDelete, courseService}) => {
 
     return (
         <Fragment>
+            <ComponentIdentifier displayName='VersionRenderer'/>
+
             <Segment>
                 <Header as='h3'>Version {version.version} - Published on {moment(version.date).format('MMM DD YYYY')} by {version.published_by}</Header>
                 <div><span style={{marginRight: '10px'}}>Unique id:</span>

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {Segment, Form, Button, Input, Label, Divider} from "semantic-ui-react";
 import {PublicationStatus, PublicationType} from "cocos-lib";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const PublicationRenderer = ({publication, onRemovePublication, onUpdatePublication, onEditPublication}) => {
 
@@ -43,6 +44,8 @@ const PublicationRenderer = ({publication, onRemovePublication, onUpdatePublicat
 
     return (
         <Segment color={statusColor}>
+            <ComponentIdentifier displayName='PublicationRenderer'/>
+
             <div className='course-info' style={{marginBottom: '10px'}}>Publication status: {publication.status}</div>
             <Form>
                 <Form.Field>

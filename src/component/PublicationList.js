@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import PublicationRenderer from "./PublicationRenderer";
 import {Button, Divider} from "semantic-ui-react";
 import {Publication, PublicationStatus, CourseUtil} from "cocos-lib";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const PublicationList = ({course, cocosUser, courseService, onEditPublication}) => {
 
@@ -51,6 +52,8 @@ const PublicationList = ({course, cocosUser, courseService, onEditPublication}) 
 
     return (
         <div>
+            <ComponentIdentifier displayName='PublicationList'/>
+
             {/*<div className='subheader'>Course Publications</div>*/}
             <div style={{marginTop: '30px'}}>
                 <p>Publications lets you select one or more course outline items and export the content to mulitple output formats. It will create one or more files (publications) which can

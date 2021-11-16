@@ -1,11 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Icon, Popup} from "semantic-ui-react";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const ContentBlockMenuItem = ({type, name, role, tooltip, enabled, important, inverted, onClick, color}) => {
 
     return (
         <div className={enabled ? important ? 'content-block-menu-item content-block-menu-item-important' : 'content-block-menu-item' : 'content-block-menu-item-disabled'} onClick={() => (enabled && onClick) && onClick(role)}>
+
+            <ComponentIdentifier displayName='ContentBlockMenuItem'/>
 
             {type === 'icon' &&
             <Popup disabled={tooltip === ''}

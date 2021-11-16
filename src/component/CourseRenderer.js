@@ -2,11 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {Header, Segment, Divider} from "semantic-ui-react";
 import CourseInfo from "./CourseInfo";
+import {ComponentIdentifier} from "./ComponentIdentifier";
 
 const CourseRenderer = ({course, onSelect}) => {
 
     return (
         <Segment style={{cursor: 'pointer'}} onClick={() => onSelect(course)}>
+            <ComponentIdentifier displayName='CourseRenderer'/>
+
             <Header as='h3' color='blue'>{course.title}</Header>
             <CourseInfo course={course}/>
             <div className='course-info'>Unique course id: {course.uuid}</div>

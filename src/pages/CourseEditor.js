@@ -9,6 +9,7 @@ import OutlineItemDetail from "../component/OutlineItemDetail";
 import CourseSharingComp from "../component/CourseSharingComp";
 import PublicationComp from "../component/PublicationComp";
 import {CommentComp, CommentContext} from "cocos-lib";
+import {ComponentIdentifier} from "../component/ComponentIdentifier";
 
 const COMMENT_TIMER_TIMEOUT = 3000
 
@@ -104,8 +105,14 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
         }
     }
 
+    const editable = true //course.owner === cocosUser.id
+
     return (
         <Fragment>
+
+            <ComponentIdentifier displayName='CourseEditor'/>
+
+
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', backgroundColor: '#bbbbbb', paddingRight: '50px'}}>
                 <NavLink to='/courses'><Button size='mini' onClick={onBackToOverviewButtonClick}><Icon name='arrow left'/>Back to courses</Button></NavLink>
                 <Header as='h2' style={{margin: 0, color: '#333333'}}>{course.title}</Header>
@@ -116,7 +123,7 @@ const CourseEditor = ({course, cocosUser, onBackToOverviewButtonClick, updateCou
             <div className='flex-container'>
 
                 <EditorOutlinePane course={course}
-                                   editable={(course.owner === cocosUser.id) && !selectedPublication}
+                                   editable={editable && !selectedPublication}
                                    updateCourse={updateCourse}
                                    onNodeSelect={onNodeSelect}
                                    publicationClassFunction={publicationClassFunction}/>

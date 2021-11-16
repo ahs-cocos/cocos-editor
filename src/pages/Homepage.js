@@ -2,13 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {NavLink} from 'react-router-dom'
 import {Image, Header, Container, Button, Divider, Icon} from "semantic-ui-react";
-import {ApplicationPath} from "cocos-lib";
+import {ApplicationPath, CocosFooter} from "cocos-lib";
+import {ComponentIdentifier} from "../component/ComponentIdentifier";
 
 const Homepage = ({loginState, onLoginClick, onGoToCourses}) => {
 
     return (
         <div className='homepage-container'>
 
+            <ComponentIdentifier displayName='Homepage'/>
             <Image style={{marginTop: '30px'}} src={ApplicationPath.assetsFolder + 'logo/logo-cocos-color.png'}/>
             <Header style={{margin: '40px'}} size='huge'>Welcome to the CoCos online course editor</Header>
             <Container text>
@@ -53,6 +55,8 @@ const Homepage = ({loginState, onLoginClick, onGoToCourses}) => {
                     <Button color='teal' onClick={onGoToCourses}>Go to your courses</Button>
                 </NavLink>
             </div>}
+
+
         </div>
     )
 }
